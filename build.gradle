@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.muserver:mu-server:1.0.4'
+    implementation 'org.hibernate:hibernate-core:6.4.4.Final'
+    implementation 'io.pebbletemplates:pebble:3.2.2'
+    implementation 'com.h2database:h2:2.2.220'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    implementation 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    runtimeOnly 'org.postgresql:postgresql:42.7.2'
+}
+
+application {
+    mainClassName = 'com.example.Main'
+}
+
+test {
+    useJUnitPlatform()
+}

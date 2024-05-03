@@ -1,0 +1,9 @@
+logs/
+gradle/
+build/
+tmp/
+out/
+.gradle/
+.idea/
+gradle*
+localhost.pkcs12.jks*
