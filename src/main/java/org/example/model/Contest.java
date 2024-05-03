@@ -1,9 +1,6 @@
 package org.example.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Contest {
@@ -11,6 +8,19 @@ public class Contest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", nullable = false)
+    private PanelReviewUser creator;
+    private String titleName;
+
+    public PanelReviewUser getCreator() {
+        return creator;
+    }
+
+    public void setCreator(PanelReviewUser creator) {
+        this.creator = creator;
+    }
 
     public String getTitleName() {
         return titleName;
@@ -24,7 +34,6 @@ public class Contest {
         this.id = id;
     }
 
-    private String titleName;
 
     public void setTitleName(String titleName) {
         this.titleName = titleName;
