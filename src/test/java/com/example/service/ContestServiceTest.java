@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ContestServiceTest {
     ContestService service;
@@ -32,7 +31,7 @@ public class ContestServiceTest {
     public void testSaveContest() {
         String reviewCycleName = "Review Cycle 1";
         String userId = "45556666";
-        String contestName = "Test Contest";
+        String contestName = "Test Contest 1";
         Contest contest = service.createContest(contestName, userId, reviewCycleName);
 
         assertNotNull(contest.getId(), "Contest ID should not be null after saving");
@@ -49,9 +48,9 @@ public class ContestServiceTest {
 
     @Test
     public void testSaveContestWithTeamsAndPanelMembers() {
-        String reviewCycleName = "Review Cycle 1";
+        String reviewCycleName = "Review Cycle 2";
         String userId = "45556666";
-        String contestName = "Test Contest";
+        String contestName = "Test Contest 2";
         Set<Team> teams = populateTeams();
         Set<PanelMember> panelMembers = populatePanelMembers();
         Contest contest = service.createContestWithTeamsAndPanelMembers(contestName, userId, reviewCycleName, teams, panelMembers);
@@ -66,9 +65,9 @@ public class ContestServiceTest {
 
     @Test
     public void testAddTeamAndPanelMemberToExistingContest() {
-        String reviewCycleName = "Review Cycle 1";
+        String reviewCycleName = "Review Cycle";
         String userId = "45556666";
-        String contestName = "Test Contest";
+        String contestName = "Test Contest 3";
         Set<Team> teams = populateTeams();
         Set<PanelMember> panelMembers = populatePanelMembers();
         Contest contest = service.createContestWithTeamsAndPanelMembers(contestName, userId, reviewCycleName, teams, panelMembers);
@@ -82,7 +81,7 @@ public class ContestServiceTest {
         assertEquals(2, retrievedContest.getPanelMembers().size());
 
         Team newTeam = new Team(); newTeam.setName("Team 3");
-        Contest contestWithNewTeam = service.addTeam(retrievedContest.getId(), newTeam);
+        service.addTeam(retrievedContest.getId(), newTeam);
 
         Contest retrievedContest2 = service.getContestWithTeamsAndPanelMembers(contest.getId());
 
@@ -93,6 +92,21 @@ public class ContestServiceTest {
         assertEquals(3, retrievedContest2.getTeams().size());
 
         assertEquals(3, contestWithPanel.getPanelMembers().size());
+    }
+    @Test
+    public void testUniquenessOfContestTitle(){
+        String reviewCycleName = "Review Cycle 4";
+        String userId = "45556666";
+        String contestName = "Test Contest 4";
+
+        service.createContest(contestName, userId, reviewCycleName);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->{
+            service.createContest(contestName, userId, reviewCycleName);
+        });
+
+        assertTrue(exception.getMessage().contains(contestName));
+
     }
 
     private Set<Team> populateTeams() {

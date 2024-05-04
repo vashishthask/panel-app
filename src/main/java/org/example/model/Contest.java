@@ -16,6 +16,8 @@ public class Contest {
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
     private PanelReviewUser creator;
+
+    @Column(unique = true)
     private String titleName;
 
     @OneToMany(mappedBy = "contest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

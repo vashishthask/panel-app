@@ -23,6 +23,8 @@ public class ContestService {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction transaction = em.getTransaction();
         try {
+            if(!isTitleNameUnique(titleName, em))
+                throw new IllegalArgumentException("Contest with titleName " + titleName + " already exists");
             transaction.begin();
             // Create Creator
             //check if user exists
@@ -79,6 +81,9 @@ public class ContestService {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction transaction = em.getTransaction();
         try {
+            if(!isTitleNameUnique(titleName, em))
+                throw new IllegalArgumentException("Contest with titleName " + titleName + " already exists");
+
             transaction.begin();
             // Create Creator
             //check if user exists
@@ -194,6 +199,14 @@ public class ContestService {
         } finally {
             em.close();
         }
+    }
+
+    private boolean isTitleNameUnique(String titleName, EntityManager entityManager) {
+        String jpql = "SELECT COUNT(c) FROM Contest c WHERE c.titleName = :titleName";
+        Long count = entityManager.createQuery(jpql, Long.class)
+                .setParameter("titleName", titleName)
+                .getSingleResult();
+        return count == 0;
     }
     // other service methods
 }
