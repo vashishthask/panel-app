@@ -6,6 +6,9 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>org.example.model.Contest</class>
         <class>org.example.model.PanelReviewUser</class>
+        <class>org.example.model.ReviewCycle</class>
+        <class>org.example.model.Team</class>
+        <class>org.example.model.PanelMember</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>
