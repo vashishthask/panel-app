@@ -2,6 +2,9 @@ package org.example.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "review_cycles")
 public class ReviewCycle {
@@ -16,8 +19,8 @@ public class ReviewCycle {
     //@JoinColumn(name = "contest_id")
     private Contest contest;
 
-//    @OneToMany(mappedBy = "reviewCycle", cascade = CascadeType.ALL)
-//    private List<PanelReviewSession> panelReviewSessions = new ArrayList<>();
+    @OneToMany(mappedBy = "reviewCycle", cascade = CascadeType.ALL)
+    private List<PanelReviewSession> panelReviewSessions = new ArrayList<>();
 
 
 
@@ -47,13 +50,13 @@ public class ReviewCycle {
 
 
 
-//    public List<PanelReviewSession> getPanelReviewMeets() {
-//        return panelReviewSessions;
-//    }
-//
-//    public void setPanelReviewMeets(List<PanelReviewSession> panelReviewSessions) {
-//        this.panelReviewSessions = panelReviewSessions;
-//    }
+    public List<PanelReviewSession> getPanelReviewMeets() {
+        return panelReviewSessions;
+    }
+
+    public void setPanelReviewMeets(List<PanelReviewSession> panelReviewSessions) {
+        this.panelReviewSessions = panelReviewSessions;
+    }
 
 
 

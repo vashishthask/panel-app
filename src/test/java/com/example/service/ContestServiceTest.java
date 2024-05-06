@@ -5,6 +5,7 @@ import org.example.model.PanelMember;
 import org.example.model.Team;
 import org.example.service.ContestService;
 import org.example.util.JPAUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,12 @@ public class ContestServiceTest {
     @BeforeEach
     public void setupTest(){
         service = new ContestService();
+    }
+
+    @AfterEach
+    public void cleanup(){
+        TestCleanup testCleanup = new TestCleanup(JPAUtil.getEntityManager());
+        testCleanup.cleanUp();
     }
 
     @Test
@@ -51,8 +58,8 @@ public class ContestServiceTest {
         String reviewCycleName = "Review Cycle 2";
         String userId = "45556666";
         String contestName = "Test Contest 2";
-        Set<Team> teams = populateTeams();
-        Set<PanelMember> panelMembers = populatePanelMembers();
+        Set<Team> teams = PanelReviewBuilder.populateTeams();
+        Set<PanelMember> panelMembers = PanelReviewBuilder.populatePanelMembers();
         Contest contest = service.createContestWithTeamsAndPanelMembers(contestName, userId, reviewCycleName, teams, panelMembers);
 
         assertNotNull(contest.getId(), "Contest ID should not be null after saving");
@@ -68,8 +75,8 @@ public class ContestServiceTest {
         String reviewCycleName = "Review Cycle";
         String userId = "45556666";
         String contestName = "Test Contest 3";
-        Set<Team> teams = populateTeams();
-        Set<PanelMember> panelMembers = populatePanelMembers();
+        Set<Team> teams = PanelReviewBuilder.populateTeams();
+        Set<PanelMember> panelMembers = PanelReviewBuilder.populatePanelMembers();
         Contest contest = service.createContestWithTeamsAndPanelMembers(contestName, userId, reviewCycleName, teams, panelMembers);
 
         assertNotNull(contest.getId(), "Contest ID should not be null after saving");
@@ -109,31 +116,7 @@ public class ContestServiceTest {
 
     }
 
-    private Set<Team> populateTeams() {
-        Team team1 = new Team();
-        team1.setName("Team 1");
-        Set<Team> teams = new HashSet<>();
-        teams.add(team1);
-        Team team2 = new Team();
-        team2.setName("Team 2");
 
-        teams.add(team2);
-        return teams;
-    }
-
-    private Set<PanelMember> populatePanelMembers() {
-        PanelMember panelMember = new PanelMember();
-        panelMember.setName("John Smith");
-        panelMember.setEmail("jsmith@email.com");
-        Set<PanelMember> panelMembers = new HashSet<>();
-        panelMembers.add(panelMember);
-        PanelMember panelMember1 = new PanelMember();
-        panelMember1.setName("Alok Kumar");
-        panelMember1.setEmail("akumar@email.com");
-
-        panelMembers.add(panelMember1);
-        return panelMembers;
-    }
 
     @BeforeAll
     public static void tearDown(){

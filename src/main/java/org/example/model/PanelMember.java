@@ -2,6 +2,9 @@ package org.example.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class PanelMember {
 
@@ -15,7 +18,19 @@ public class PanelMember {
     private Contest contest;
     private String email;
 
+    @ManyToMany(mappedBy = "panelMembers")
+    private Set<PanelReviewSession> panelReviewSessions = new HashSet<>();
+
     // Constructors, getters, and setters
+
+
+    public Set<PanelReviewSession> getPanelReviewSessions() {
+        return panelReviewSessions;
+    }
+
+    public void setPanelReviewSessions(Set<PanelReviewSession> panelReviewSessions) {
+        this.panelReviewSessions = panelReviewSessions;
+    }
 
     public Long getId() {
         return id;
