@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contest and ReviewCycle Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/semantic.min.css">
+</head>
+<body>
+<div class="ui container">
+    <h1>Contests</h1>
+    <div class="ui cards">
+        <!-- Loop through the list of contests -->
+        <!-- Contest 1 -->
+        <div class="card">
+            <div class="content">
+                <div class="header">Contest Title 1</div>
+                <div class="meta">Created by: Creator Name</div>
+                <!-- Button to create a new ReviewCycle for this contest -->
+                <button class="ui button">Create New ReviewCycle</button>
+            </div>
+            <div class="extra content">
+                <!-- List of review cycles for Contest 1 -->
+                <div class="ui list">
+                    <!-- ReviewCycle 1 -->
+                    <div class="item">
+                        <div class="header">ReviewCycle 1</div>
+                        <!-- Add details about the review cycle -->
+                        <!-- Options for managing PanelReviewSessions -->
+                        <div class="description">
+                            <button class="ui button">List PanelReviewSessions</button>
+                            <button class="ui button">Create New PanelReviewSession</button>
+                            <button class="ui button">Upload Multiple PanelReviewSessions</button>
+                        </div>
+                    </div>
+                    <!-- Add more items for other review cycles in Contest 1 -->
+                </div>
+                <!-- Options for managing Teams and PanelMembers -->
+                <div class="ui list">
+                    <div class="item">
+                        <div class="header">Teams</div>
+                        <!-- Button to list teams -->
+                        <button class="ui button">List Teams</button>
+                        <!-- Button to create a new team -->
+                        <button class="ui button">Create New Team</button>
+                    </div>
+                    <div class="item">
+                        <div class="header">Panel Members</div>
+                        <!-- Button to list panel members -->
+                        <button class="ui button">List Panel Members</button>
+                        <!-- Button to create a new panel member -->
+                        <button class="ui button">Create New Panel Member</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add more cards for other contests -->
+        <!-- Contest 2, Contest 3, ... -->
+    </div>
+    <!-- Button to create a new Contest -->
+    <button class="ui button">Create New Contest</button>
+
+    <!-- Section for Panel Review Sessions needing evaluation -->
+    <h2>Panel Review Sessions Needing Evaluation</h2>
+    <div class="ui list">
+        <!-- Loop through the list of Panel Review Sessions needing evaluation -->
+        <div class="item">
+            <div class="header">Contest Title 1 - ReviewCycle 1</div>
+            <!-- List of Panel Review Sessions needing evaluation -->
+            <div class="description">
+                <a href="#">Panel Review Session 1</a>
+                <a href="#">Panel Review Session 2</a>
+                <!-- Add more links for other Panel Review Sessions -->
+            </div>
+        </div>
+        <!-- Add more items for other contests and review cycles -->
+    </div>
+
+    <!-- Section for Panel Review Sessions already evaluated -->
+    <h2>Panel Review Sessions Already Evaluated</h2>
+    <div class="ui list">
+        <!-- Loop through the list of Panel Review Sessions already evaluated -->
+        <div class="item">
+            <div class="header">Contest Title 1 - ReviewCycle 1</div>
+            <!-- List of Panel Review Sessions already evaluated -->
+            <div class="description">
+                <a href="#">Panel Review Session 3</a>
+                <a href="#">Panel Review Session 4</a>
+                <!-- Add more links for other Panel Review Sessions -->
+            </div>
+        </div>
+        <!-- Add more items for other contests and review cycles -->
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.7/semantic.min.js"></script>
+</body>
+</html>

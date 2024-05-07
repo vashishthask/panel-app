@@ -1,4 +1,4 @@
-package com.example.service;
+package org.example.service;
 
 import org.example.model.PanelMember;
 import org.example.model.Team;

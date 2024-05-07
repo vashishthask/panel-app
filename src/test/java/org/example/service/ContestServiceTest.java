@@ -1,9 +1,9 @@
-package com.example.service;
+package org.example.service;
 
 import org.example.model.Contest;
 import org.example.model.PanelMember;
+import org.example.model.ReviewCycle;
 import org.example.model.Team;
-import org.example.service.ContestService;
 import org.example.util.JPAUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ContestServiceTest {
     ContestService service;
+    String reviewCycleName = "Review Cycle 1";
+    String userId = "45556666";
+    String contestName = "Test Contest 1";
 
     @BeforeAll
     public static void setup(){
@@ -36,9 +39,7 @@ public class ContestServiceTest {
 
     @Test
     public void testSaveContest() {
-        String reviewCycleName = "Review Cycle 1";
-        String userId = "45556666";
-        String contestName = "Test Contest 1";
+
         Contest contest = service.createContest(contestName, userId, reviewCycleName);
 
         assertNotNull(contest.getId(), "Contest ID should not be null after saving");
@@ -46,7 +47,9 @@ public class ContestServiceTest {
         Contest retrievedContest = service.getContestEager(contest.getId());
         assertEquals(contestName, retrievedContest.getTitleName(), "Contest title should match after saving");
         assertEquals(userId, retrievedContest.getCreator().getId());
-        assertEquals(reviewCycleName, retrievedContest.getReviewCycles().get(0).getName());
+        Set<ReviewCycle> reviewCycles = retrievedContest.getReviewCycles();
+        List<ReviewCycle> reviewCycleList = new ArrayList<>(reviewCycles);
+        assertEquals(reviewCycleName, reviewCycleList.get(0).getName());
 
         assertNotNull(retrievedContest, "Retrieved contest should not be null");
         assertEquals(contest.getId(), retrievedContest.getId(), "Retrieved contest ID should match saved contest ID");
@@ -68,6 +71,50 @@ public class ContestServiceTest {
         assertEquals(2, retrievedContest.getTeams().size());
 
         assertEquals(2, retrievedContest.getPanelMembers().size());
+    }
+
+    @Test
+    public void testGetContestByNameByReviewCycleNameWithTeamsAndPanelMembers() {
+        String reviewCycleName = "Review Cycle 2";
+        String userId = "45556666";
+        String contestName = "Test Contest 2";
+        Set<Team> teams = PanelReviewBuilder.populateTeams();
+        Set<PanelMember> panelMembers = PanelReviewBuilder.populatePanelMembers();
+        Contest contest = service.createContestWithTeamsAndPanelMembers(contestName, userId, reviewCycleName, teams, panelMembers);
+
+        assertNotNull(contest.getId(), "Contest ID should not be null after saving");
+
+        Contest retrievedContest = service.getContestByNameByReviewCycleNameWithTeamsAndPanelMembers(contestName, reviewCycleName);
+        for(ReviewCycle cycle: retrievedContest.getReviewCycles()){
+            System.err.println("Id:"+ cycle.getId() + " Name:"+cycle.getName());
+        }
+        assertEquals(1, retrievedContest.getReviewCycles().size());
+        assertEquals(2, retrievedContest.getTeams().size());
+
+        assertEquals(2, retrievedContest.getPanelMembers().size());
+    }
+
+    @Test
+    void testGetContestsByCreatorId() {
+        service.createContest(contestName, userId, reviewCycleName);
+        List<Contest> contests = service.getContestsByCreatorIdWithReviewCycles(userId);
+        assertEquals(1, contests.size());
+        assertEquals(1, contests.get(0).getReviewCycles().size());
+        Contest contest = service.createContest("Another Contest", userId, reviewCycleName);
+        contests = service.getContestsByCreatorIdWithReviewCycles(userId);
+        assertEquals(2, contests.size());
+        assertEquals(1, contests.get(0).getReviewCycles().size());
+
+        ReviewCycle anotherReviewCycle = new ReviewCycle();
+        anotherReviewCycle.setName("Review Cycle 2");
+        service.addReviewCycle(contest.getId(), anotherReviewCycle);
+        contests = service.getContestsByCreatorIdWithReviewCycles(userId);
+        Contest result = null;
+        for(Contest c: contests){
+            if(c.getId().equals(contest.getId()))
+                result = c;
+        }
+        assertEquals(2, result.getReviewCycles().size());
     }
 
     @Test

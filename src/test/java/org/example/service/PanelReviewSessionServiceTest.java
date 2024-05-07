@@ -1,11 +1,7 @@
-package com.example.service;
+package org.example.service;
 
 
 import org.example.model.*;
-import org.example.service.ContestService;
-import org.example.service.PanelReviewSessionService;
-import org.example.service.ReviewCycleService;
-import org.example.service.TeamService;
 import org.example.util.JPAUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,9 +26,9 @@ public class PanelReviewSessionServiceTest {
 
     @BeforeEach
     public void setupTest(){
-        String reviewCycleName = "Review Cycle 2";
+        String reviewCycleName = "Review Cycle 1";
         String userId = "45556666";
-        String contestName = "Test Contest 2";
+        String contestName = "Star Hackathon";
         contestService = new ContestService();
         contest = contestService.createContestWithTeamsAndPanelMembers(contestName,
                 userId, reviewCycleName, PanelReviewBuilder.populateTeams(), PanelReviewBuilder.populatePanelMembers());
@@ -50,7 +46,9 @@ public class PanelReviewSessionServiceTest {
     @Test
     void testAddPanelReviewSessionWithReviewCycle() {
         Contest retrievedContest = contestService.getContestWithTeamsAndPanelMembers(contest.getId());
-        long reviewCycleId = retrievedContest.getReviewCycles().get(0).getId();
+        Set<ReviewCycle> reviewCycles = retrievedContest.getReviewCycles();
+        List<ReviewCycle> reviewCycleList = new ArrayList<>(reviewCycles);
+        long reviewCycleId = reviewCycleList.get(0).getId();
         Team team = new TeamService().getTeamByTeamNameAndContest("Team 1", contest);
 
         PanelReviewSession panelReviewSession = new PanelReviewSession();
@@ -89,7 +87,9 @@ public class PanelReviewSessionServiceTest {
 
         //retrieve the Contest with teams and panelMembers
         Contest retrievedContest = contestService.getContestWithTeamsAndPanelMembers(contest.getId());
-        long reviewCycleId = retrievedContest.getReviewCycles().get(0).getId();
+        Set<ReviewCycle> reviewCycles = retrievedContest.getReviewCycles();
+        List<ReviewCycle> reviewCycleList = new ArrayList<>(reviewCycles);
+        long reviewCycleId = reviewCycleList.get(0).getId();
         Set<PanelMember> panelMembers = retrievedContest.getPanelMembers();
         assertEquals(3, panelMembers.size());
 

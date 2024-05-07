@@ -3,7 +3,6 @@ package org.example.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,7 +20,7 @@ public class Contest {
     private String titleName;
 
     @OneToMany(mappedBy = "contest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ReviewCycle> reviewCycles;
+    private Set<ReviewCycle> reviewCycles;
 
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
     private Set<Team> teams = new HashSet<>();
@@ -45,11 +44,11 @@ public class Contest {
         this.panelMembers = panelMembers;
     }
 
-    public List<ReviewCycle> getReviewCycles() {
+    public Set<ReviewCycle> getReviewCycles() {
         return reviewCycles;
     }
 
-    public void setReviewCycles(List<ReviewCycle> reviewCycles) {
+    public void setReviewCycles(Set<ReviewCycle> reviewCycles) {
         this.reviewCycles = reviewCycles;
     }
 

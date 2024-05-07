@@ -8,10 +8,7 @@ import org.example.dao.ReviewCycleDao;
 import org.example.model.*;
 import org.example.util.JPAUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class ContestService {
 
@@ -45,7 +42,7 @@ public class ContestService {
             reviewCycle.setName(reviewCycleName);
             reviewCycle.setContest(contest);
 
-            List<ReviewCycle> reviewCycles = new ArrayList<>();
+            Set<ReviewCycle> reviewCycles = new HashSet<>();
             reviewCycles.add(reviewCycle);
 
             contest.setReviewCycles(reviewCycles);
@@ -103,7 +100,7 @@ public class ContestService {
             ReviewCycle reviewCycle = new ReviewCycle();
             reviewCycle.setName(reviewCycleName);
             reviewCycle.setContest(contest);
-            List<ReviewCycle> reviewCycles = new ArrayList<>();
+            Set<ReviewCycle> reviewCycles = new HashSet<>();
             reviewCycles.add(reviewCycle);
             contest.setReviewCycles(reviewCycles);
 
@@ -144,6 +141,12 @@ public class ContestService {
         }
     }
 
+    public List<Contest> getContestsByCreatorIdWithReviewCycles(String creatorId) {
+        try(EntityManager em = JPAUtil.getEntityManager()) {
+            return new ContestDAO(em).getContestsByCreatorIdWithReviewCycles(creatorId);
+        }
+    }
+
     public Contest getContestEager(Long id) {
         try(EntityManager em = JPAUtil.getEntityManager()) {
             return new ContestDAO(em).getContestWithUser(id);
@@ -152,7 +155,35 @@ public class ContestService {
 
     public Contest getContestWithTeamsAndPanelMembers(Long id) {
         try(EntityManager em = JPAUtil.getEntityManager()) {
-            return new ContestDAO(em).getContestWithTeamsAndPanelMembers(id);
+            return new ContestDAO(em).getContestWithReviewCyclesTeamsAndPanelMembers(id);
+        }
+    }
+
+    public Contest addReviewCycle(long id, ReviewCycle reviewCycle){
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            ContestDAO contestDao = new ContestDAO(em);
+            Contest contest = contestDao.getContestWithReviewCyclesTeamsAndPanelMembers(id);
+            reviewCycle.setContest(contest);
+            contest.getReviewCycles().add(reviewCycle);
+            em.persist(reviewCycle);
+            transaction.commit();
+            return contest;
+        } catch (Exception e){
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Contest getContestByNameByReviewCycleNameWithTeamsAndPanelMembers(String titleName, String reviewCycleName) {
+        try(EntityManager em = JPAUtil.getEntityManager()) {
+            return new ContestDAO(em).getContestByNameByReviewCycleNameWithTeamsAndPanelMembers(titleName, reviewCycleName);
         }
     }
 
@@ -162,7 +193,7 @@ public class ContestService {
         try {
             transaction.begin();
             ContestDAO contestDao = new ContestDAO(em);
-            Contest contest = contestDao.getContestWithTeamsAndPanelMembers(id);
+            Contest contest = contestDao.getContestWithReviewCyclesTeamsAndPanelMembers(id);
             newTeam.setContest(contest);
             contest.getTeams().add(newTeam);
             em.persist(newTeam);
@@ -185,7 +216,7 @@ public class ContestService {
         try {
             transaction.begin();
             ContestDAO contestDao = new ContestDAO(em);
-            Contest contest = contestDao.getContestWithTeamsAndPanelMembers(id);
+            Contest contest = contestDao.getContestWithReviewCyclesTeamsAndPanelMembers(id);
             panelMember.setContest(contest);
             contest.getPanelMembers().add(panelMember);
             em.persist(panelMember);

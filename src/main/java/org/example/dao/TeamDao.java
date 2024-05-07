@@ -25,4 +25,9 @@ public class TeamDao {
             return null;
         }
     }
+
+    public Team save(Team team){
+        entityManager.persist(team);
+        return team;
+    }
 }

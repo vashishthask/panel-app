@@ -33,4 +33,14 @@ public class ReviewCycleDao {
         return results == null ? null : results.get(0);
     }
 
+    public ReviewCycle getReviewCycleByContestTitleAndReviewCycleName(String contestTitleName, String reviewCycleName) {
+        String jpql = "SELECT rc FROM ReviewCycle rc " +
+                "JOIN rc.contest c " +
+                "WHERE c.titleName = :contestTitleName AND rc.name = :reviewCycleName";
+        TypedQuery<ReviewCycle> query = em.createQuery(jpql, ReviewCycle.class);
+        query.setParameter("contestTitleName", contestTitleName);
+        query.setParameter("reviewCycleName", reviewCycleName);
+        return query.getSingleResult();
+    }
+
 }

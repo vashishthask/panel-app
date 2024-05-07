@@ -21,6 +21,15 @@ public class PanelMember {
     @ManyToMany(mappedBy = "panelMembers")
     private Set<PanelReviewSession> panelReviewSessions = new HashSet<>();
 
+    public PanelMember(String name, String emailId) {
+        this.name = name;
+        this.email = emailId;
+    }
+
+    public PanelMember(){
+
+    }
+
     // Constructors, getters, and setters
 
 

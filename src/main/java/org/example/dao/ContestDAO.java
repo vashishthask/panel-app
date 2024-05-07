@@ -34,7 +34,7 @@ public class ContestDAO {
     }
 
 
-    public Contest getContestWithTeamsAndPanelMembers(Long id) {
+    public Contest getContestWithReviewCyclesTeamsAndPanelMembers(Long id) {
         TypedQuery<Contest> query = entityManager.createQuery(
                 "SELECT c FROM Contest c LEFT JOIN FETCH c.reviewCycles " +
                         "LEFT JOIN FETCH c.teams " +
@@ -45,6 +45,19 @@ public class ContestDAO {
         System.err.println("The results are:"+ results.get(0));
         return results == null ? null : results.get(0);
     }
+
+    public Contest getContestByNameByReviewCycleNameWithTeamsAndPanelMembers(String titleName, String reviewCycleName) {
+        TypedQuery<Contest> query = entityManager.createQuery(
+                "SELECT c FROM Contest c JOIN FETCH c.reviewCycles rc " +
+                        "LEFT JOIN FETCH c.teams " +
+                        "LEFT JOIN FETCH c.panelMembers " +
+                        "WHERE c.titleName = :titleName and rc.name = :reviewCycleName" , Contest.class);
+        query.setParameter("titleName", titleName);
+        query.setParameter("reviewCycleName", reviewCycleName);
+        return query.getSingleResult();
+    }
+
+
 
     public List<PanelMember> getPanelMembersByContestTitleName(String titleName) {
         String jpql = "SELECT p FROM PanelMember p " +
@@ -60,6 +73,13 @@ public class ContestDAO {
     public Contest merge(Contest contest) {
         entityManager.merge(contest);
         return contest;
+    }
+
+    public List<Contest> getContestsByCreatorIdWithReviewCycles(String creatorId) {
+        String jpql = "SELECT c FROM Contest c LEFT JOIN FETCH c.reviewCycles WHERE c.creator.id = :creatorId";
+        TypedQuery<Contest> query = entityManager.createQuery(jpql, Contest.class);
+        query.setParameter("creatorId", creatorId);
+        return query.getResultList();
     }
 
     // other CRUD operations

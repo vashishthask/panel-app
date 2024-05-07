@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class Team {
+    private String programmeName;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,6 +13,23 @@ public class Team {
 
     @ManyToOne
     private Contest contest;
+
+    public Team(String teamName, String programmeName) {
+        this.name = teamName;
+        this.programmeName = programmeName;
+    }
+
+    public Team(){
+
+    }
+
+    public String getProgrammeName() {
+        return programmeName;
+    }
+
+    public void setProgrammeName(String programmeName) {
+        this.programmeName = programmeName;
+    }
 
     public Long getId() {
         return id;
