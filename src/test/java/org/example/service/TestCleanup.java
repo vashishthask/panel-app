@@ -21,8 +21,6 @@ public class TestCleanup {
             entityManager.createQuery("DELETE FROM ReviewCycle").executeUpdate();
             entityManager.createQuery("DELETE FROM Team").executeUpdate();
             entityManager.createQuery("DELETE FROM Contest").executeUpdate();
-
-
             transaction.commit();
         } catch (Exception e) {
             if (transaction.isActive()) {

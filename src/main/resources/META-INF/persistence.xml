@@ -5,7 +5,7 @@
     <persistence-unit name="panel-app" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>org.example.model.Contest</class>
-        <class>org.example.model.PanelReviewUser</class>
+        <class>org.example.model.ContestWorkingMember</class>
         <class>org.example.model.ReviewCycle</class>
         <class>org.example.model.Team</class>
         <class>org.example.model.PanelMember</class>

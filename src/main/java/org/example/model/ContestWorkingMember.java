@@ -3,18 +3,20 @@ package org.example.model;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-public class PanelReviewUser {
+public class ContestWorkingMember {
     @Id
     private String id;
 
-    public PanelReviewUser(String id){
+    public ContestWorkingMember(String id){
         this.id = id;
     }
 
-    public PanelReviewUser(){
+    public ContestWorkingMember(){
     }
 
     private String emailId;
@@ -22,12 +24,14 @@ public class PanelReviewUser {
     @OneToMany(mappedBy = "creator")
     private List<Contest> createdContests = new ArrayList<>();
 
+
     @ManyToMany
     @JoinTable(
-        name = "contest_collaborators",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "contest_id"))
-    private List<Contest> collaboratedContests = new ArrayList<>();
+            name = "contest_collaborators",
+            joinColumns = @JoinColumn(name = "contest_id"),
+            inverseJoinColumns = @JoinColumn(name = "member_id")
+    )
+    private Set<Contest> collaboratedContests = new HashSet<>();
 
     public String getId() {
         return id;
@@ -41,11 +45,11 @@ public class PanelReviewUser {
         this.createdContests = createdContests;
     }
 
-    public List<Contest> getCollaboratedContests() {
+    public Set<Contest> getCollaboratedContests() {
         return collaboratedContests;
     }
 
-    public void setCollaboratedContests(List<Contest> collaboratedContests) {
+    public void setCollaboratedContests(Set<Contest> collaboratedContests) {
         this.collaboratedContests = collaboratedContests;
     }
 

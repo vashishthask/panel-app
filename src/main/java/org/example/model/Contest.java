@@ -14,7 +14,7 @@ public class Contest {
 
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
-    private PanelReviewUser creator;
+    private ContestWorkingMember creator;
 
     @Column(unique = true)
     private String titleName;
@@ -27,6 +27,22 @@ public class Contest {
 
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
     private Set<PanelMember> panelMembers = new HashSet<>();
+
+    @ManyToMany(mappedBy = "collaboratedContests", cascade = CascadeType.ALL)
+    private Set<ContestWorkingMember> collaborators = new HashSet<>();
+
+
+    public Set<ContestWorkingMember> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(Set<ContestWorkingMember> collaborators) {
+        this.collaborators = collaborators;
+    }
+
+    public void addCollaborator(ContestWorkingMember collaborator) {
+        collaborators.add(collaborator);
+    }
 
     public Set<Team> getTeams() {
         return teams;
@@ -52,11 +68,11 @@ public class Contest {
         this.reviewCycles = reviewCycles;
     }
 
-    public PanelReviewUser getCreator() {
+    public ContestWorkingMember getCreator() {
         return creator;
     }
 
-    public void setCreator(PanelReviewUser creator) {
+    public void setCreator(ContestWorkingMember creator) {
         this.creator = creator;
     }
 
@@ -77,4 +93,3 @@ public class Contest {
         this.titleName = titleName;
     }
 }
-

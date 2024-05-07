@@ -3,8 +3,10 @@ package org.example.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.example.model.Contest;
+import org.example.model.ContestWorkingMember;
 import org.example.model.PanelMember;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContestDAO {
@@ -15,7 +17,7 @@ public class ContestDAO {
         this.entityManager = entityManager;
     }
 
-    public Contest createContest(Contest contest) {
+    public Contest saveContest(Contest contest) {
         entityManager.persist(contest);
         return contest;
     }
@@ -24,14 +26,17 @@ public class ContestDAO {
         return entityManager.find(Contest.class, id);
     }
 
-    public Contest getContestWithUser(Long id) {
+    public Contest getContestWithReviewCycles(Long id) {
         TypedQuery<Contest> query = entityManager.createQuery(
-                "SELECT c FROM Contest c LEFT JOIN FETCH c.reviewCycles WHERE c.id = :id" , Contest.class);
+                "SELECT c FROM Contest c LEFT JOIN FETCH c.reviewCycles " +
+                        "LEFT JOIN FETCH c.collaborators " +
+                        "WHERE c.id = :id" , Contest.class);
         query.setParameter("id", id);
         List<Contest> results = query.getResultList();
         System.err.println("The results are:"+ results.get(0));
         return results == null ? null : results.get(0);
     }
+
 
 
     public Contest getContestWithReviewCyclesTeamsAndPanelMembers(Long id) {
@@ -75,12 +80,25 @@ public class ContestDAO {
         return contest;
     }
 
-    public List<Contest> getContestsByCreatorIdWithReviewCycles(String creatorId) {
-        String jpql = "SELECT c FROM Contest c LEFT JOIN FETCH c.reviewCycles WHERE c.creator.id = :creatorId";
+    public List<Contest> getCreatedAndCollaboratedContestsByCreatorIdWithReviewCycles(String workingMemberId) {
+        String jpql = "SELECT c FROM Contest c " +
+                "LEFT JOIN FETCH c.reviewCycles " +
+                "WHERE c.creator.id = :workingMemberId OR " +
+                ":workingMemberId IN (SELECT cm.id FROM c.collaborators cm)";
         TypedQuery<Contest> query = entityManager.createQuery(jpql, Contest.class);
-        query.setParameter("creatorId", creatorId);
+        query.setParameter("workingMemberId", workingMemberId);
         return query.getResultList();
     }
 
+    public List<Contest> findContestsByContestWorkingMemberId(String userId) {
+        String jpql = "SELECT u FROM ContestWorkingMember u JOIN FETCH u.createdContests WHERE u.id = :userId";
+        TypedQuery<ContestWorkingMember> query = entityManager.createQuery(jpql, ContestWorkingMember.class);
+        query.setParameter("userId", userId);
+        List<ContestWorkingMember> users = query.getResultList();
+        if(users != null && !users.isEmpty()){
+            return users.get(0).getCreatedContests();
+        }
+        return new ArrayList<>();
+    }
     // other CRUD operations
 }
