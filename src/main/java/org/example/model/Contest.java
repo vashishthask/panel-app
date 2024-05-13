@@ -20,7 +20,7 @@ public class Contest {
     private String titleName;
 
     @OneToMany(mappedBy = "contest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ReviewCycle> reviewCycles;
+    private Set<ReviewCycle> reviewCycles = new HashSet<>();
 
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
     private Set<Team> teams = new HashSet<>();

@@ -10,6 +10,7 @@
         <class>org.example.model.Team</class>
         <class>org.example.model.PanelMember</class>
         <class>org.example.model.PanelReviewSession</class>
+        <class>org.example.model.Evaluation</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>

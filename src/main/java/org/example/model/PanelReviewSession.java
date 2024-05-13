@@ -3,7 +3,9 @@ package org.example.model;
 import jakarta.persistence.*;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,9 +24,9 @@ public class PanelReviewSession {
     @JoinColumn(name = "review_cycle_id")
     private ReviewCycle reviewCycle;
 
-//    // Assuming each PanelReviewMeet has multiple evaluations:
-//    @OneToMany(mappedBy = "panelReviewSession", cascade = CascadeType.ALL)
-//    private List<Evaluation> evaluations = new ArrayList<>();
+    // Assuming each PanelReviewMeet has multiple evaluations:
+    @OneToMany(mappedBy = "panelReviewSession", cascade = CascadeType.ALL)
+    private List<Evaluation> evaluations = new ArrayList<>();
     
     @ManyToMany
     @JoinTable(
@@ -50,13 +52,13 @@ public class PanelReviewSession {
 		this.id = id;
 	}
 
-//	public List<Evaluation> getEvaluations() {
-//		return evaluations;
-//	}
-//
-//	public void setEvaluations(List<Evaluation> evaluations) {
-//		this.evaluations = evaluations;
-//	}
+	public List<Evaluation> getEvaluations() {
+		return evaluations;
+	}
+
+	public void setEvaluations(List<Evaluation> evaluations) {
+		this.evaluations = evaluations;
+	}
 
 	public Team getTeam() {
 		return team;

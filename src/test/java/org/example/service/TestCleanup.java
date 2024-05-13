@@ -16,6 +16,7 @@ public class TestCleanup {
         transaction.begin();
 
         try {
+            entityManager.createQuery("DELETE FROM Evaluation").executeUpdate();
             entityManager.createQuery("DELETE FROM PanelMember").executeUpdate();
             entityManager.createQuery("DELETE FROM PanelReviewSession").executeUpdate();
             entityManager.createQuery("DELETE FROM ReviewCycle").executeUpdate();
